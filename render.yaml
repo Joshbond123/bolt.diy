@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: bolt-diy
+    env: node
+    plan: free
+    autoDeploy: false
+    buildCommand: NODE_OPTIONS=--max-old-space-size=3072 INCLUDE_PKG_METADATA=false pnpm install --frozen-lockfile && NODE_OPTIONS=--max-old-space-size=3072 INCLUDE_PKG_METADATA=false pnpm run build
+    startCommand: pnpm run renderstart
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CEREBRAS_API_KEY
+        sync: false
+      - key: CEREBRAS_API_BASE_URL
+        value: https://api.cerebras.ai/v1
+      - key: KEEPALIVE_TOKEN
+        sync: false

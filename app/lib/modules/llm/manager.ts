@@ -198,6 +198,12 @@ export class LLMManager {
   }
 
   getDefaultProvider(): BaseProvider {
+    const cerebrasProvider = this._providers.get('Cerebras');
+
+    if (cerebrasProvider) {
+      return cerebrasProvider;
+    }
+
     const firstProvider = this._providers.values().next().value;
 
     if (!firstProvider) {
