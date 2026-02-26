@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: bolt-diy
+    env: node
+    plan: free
+    autoDeploy: false
+    buildCommand: pnpm install --frozen-lockfile && pnpm run build
+    startCommand: pnpm run renderstart
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CEREBRAS_API_KEY
+        sync: false
+      - key: CEREBRAS_API_BASE_URL
+        value: https://api.cerebras.ai/v1
+      - key: KEEPALIVE_TOKEN
+        sync: false

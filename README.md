@@ -331,6 +331,57 @@ Remember to always commit your local changes or stash them before pulling update
 
 ---
 
+## Deploy on Render (Free Tier)
+
+This repository includes a `render.yaml` Blueprint for one-click deployment on Render using a Node service (no Docker required).
+
+1. Push your fork/repo to GitHub.
+2. In Render, choose **New +** → **Blueprint**.
+3. Select this repository and deploy.
+4. Set `CEREBRAS_API_KEY` in Render environment variables (optional if users add keys in the UI).
+
+### Important Render Free limits (official behavior)
+
+Render Free web services:
+- spin down after ~15 minutes of inactivity,
+- consume a shared monthly free instance-hours quota while running,
+- are suspended for the month when that quota is exhausted.
+
+Because of this, it is **not possible** to keep a Free web service always alive without using monthly quota.
+
+### How to minimize monthly usage on Free
+
+### Keep-alive cron job (optional)
+
+If you want faster wake-ups, you can ping the service with cron-job.org (or any scheduler):
+
+- URL: `https://<your-render-service>.onrender.com/api/keepalive?token=<KEEPALIVE_TOKEN>`
+- Method: `GET`
+- Frequency: every 10–14 minutes
+
+Security setup:
+- Set `KEEPALIVE_TOKEN` in Render environment variables.
+- Use the same token in your cron URL query string (or send `x-keepalive-token` header).
+
+> Important: keep-alive pings keep your service running more often and will consume your free monthly instance hours faster.
+
+- Keep `autoDeploy: false` (already set in `render.yaml`) so every push does not trigger a new build.
+- Use uptime monitors/cron pings only if needed for responsiveness; they increase free-hour usage.
+- Avoid opening many preview deploys at once.
+- Prefer static pages for marketing/docs traffic if you need near-zero runtime usage.
+
+> Render runtime note: `pnpm run renderstart` binds to Render's `PORT` automatically (`${PORT:-10000}`), so deployment works on Render-managed ports.
+
+The default model is set to `gpt-oss-120b` using the `Cerebras` provider.
+
+File-based storage is available without external DB via:
+- `data/local-db.json`
+- `/api/localdb` endpoint
+
+> Render Free caveat: local filesystem data can be lost after spin-down/restart/redeploy, so use environment variables and client export/backup for anything critical.
+
+---
+
 ## Available Scripts
 
 - **`pnpm run dev`**: Starts the development server.
