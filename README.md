@@ -369,6 +369,7 @@ Security setup:
 - Use uptime monitors/cron pings only if needed for responsiveness; they increase free-hour usage.
 - Avoid opening many preview deploys at once.
 - Prefer static pages for marketing/docs traffic if you need near-zero runtime usage.
+- Build is configured to reduce memory pressure on Render (`INCLUDE_PKG_METADATA=false`) and uses increased Node heap for builds via `NODE_OPTIONS=--max-old-space-size=3072`.
 
 > Render runtime note: `pnpm run renderstart` binds to Render's `PORT` automatically (`${PORT:-10000}`), so deployment works on Render-managed ports.
 

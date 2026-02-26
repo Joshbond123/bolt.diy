@@ -4,6 +4,7 @@ services:
     env: node
     plan: free
     autoDeploy: false
+    buildCommand: NODE_OPTIONS=--max-old-space-size=3072 INCLUDE_PKG_METADATA=false pnpm install --frozen-lockfile && NODE_OPTIONS=--max-old-space-size=3072 INCLUDE_PKG_METADATA=false pnpm run build
     buildCommand: pnpm install --frozen-lockfile && pnpm run build
     startCommand: pnpm run renderstart
     envVars:
